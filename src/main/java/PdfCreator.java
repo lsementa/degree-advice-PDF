@@ -31,7 +31,7 @@ public class PdfCreator {
         // Directory where the PDFs will be saved
         String pdfDirectory = "C:\\Users\\lsementa\\Desktop\\indiv9322-pdf\\";
         // Location of the main XSL template
-        // Degree Advice uses 19 XSL templates and a linked images folder to create the PDF
+        // Degree Advice uses 19 XSL templates and references an 'images' folder to create the PDF
         // Located in /usr/local/app/sghe/dw/dwprod/local
         String xsltFile = "C:\\Users\\lsementa\\Documents\\Degree Advice\\degree-advice-pdf\\xsl\\fopaudits.xsl";
 
