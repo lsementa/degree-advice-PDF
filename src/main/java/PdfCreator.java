@@ -27,13 +27,15 @@ public class PdfCreator {
 
         // Directory containing the XML files
         // Located in /usr/local/app/sghe/dw/dwprod/admin/xmltrees
-        String xmlDirectory = "C:\\Users\\lsementa\\Desktop\\indiv9322-xml\\";
+        String xmlDirectory = "C:\\Users\\lsementa\\Desktop\\indiv9348-xml\\";
         // Directory where the PDFs will be saved
-        String pdfDirectory = "C:\\Users\\lsementa\\Desktop\\indiv9322-pdf\\";
+        String pdfDirectory = "C:\\Users\\lsementa\\Desktop\\indiv9348\\";
         // Location of the main XSL template
         // Degree Advice uses 19 XSL templates and references an 'images' folder to create the PDF
         // Located in /usr/local/app/sghe/dw/dwprod/local
         String xsltFile = "C:\\Users\\lsementa\\Documents\\Degree Advice\\degree-advice-pdf\\xsl\\fopaudits.xsl";
+        // String that will collect all the fails and display them at the end
+        String fails = "Fails:\n";
 
         // Get list of all XML files in the directory
         File dir = new File(xmlDirectory);
@@ -62,12 +64,15 @@ public class PdfCreator {
                     pb.step();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("Failed to generate PDF for: " + xmlFile.getName());
+                    //System.out.println("Failed to generate PDF for: " + xmlFile.getName());
+                    fails += "Failed to generate PDF for: " + xmlFile.getName() + "\n";
                 }
             }
 
             // Close the progress bar
             pb.close();
+            // Display fails
+            System.out.println(fails);
         } else {
             System.out.println("No XML files found in the specified directory.");
         }
