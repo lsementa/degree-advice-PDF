@@ -1,6 +1,7 @@
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -22,19 +23,25 @@ import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
 import me.tongfei.progressbar.ProgressBarStyle;
 
+
 public class PdfCreatorMulti {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Logger fopLogger = Logger.getLogger("org.apache.fop");
         fopLogger.setLevel(Level.SEVERE);
 
-        // Directory Paths
-        String xmlDirectory = "C:\\Users\\lsementa\\Desktop\\indiv9346-xml\\";
-        String pdfDirectory = "C:\\Users\\lsementa\\Desktop\\indiv9346\\";
+        // Load the config file
+        Properties config = ConfigLoader.loadConfig("config.properties");
+        // Directory to XML files and where to save PDFs
+        String xmlDirectory = config.getProperty("xml.directory");
+        String pdfDirectory = config.getProperty("pdf.directory");
 
         // XSL Templates
-        String xsltFile = "C:\\Users\\lsementa\\Documents\\Degree Advice\\degree-advice-pdf\\xsl\\fopaudits.xsl";
-        String xsltDashboardFile = "C:\\Users\\lsementa\\Documents\\Degree Advice\\degree-advice-pdf\\Dashboard\\DGW_Report.xsl";
+        String xsltFile = config.getProperty("xslt.file");
+        String xsltDashboardFile = config.getProperty("xslt.dashboard.file");
+
+        // Path to wkhtmltopdf executable used for creating PDFs with HTML as backup
+        String wkhtmltopdfPath = config.getProperty("wkhtmltopdf.path");
 
         StringBuilder fails = new StringBuilder();
         File dir = new File(xmlDirectory);
@@ -68,7 +75,7 @@ public class PdfCreatorMulti {
                             generateHTML(xmlFile.getAbsolutePath(), xsltDashboardFile, outputHtml);
                             try {
                                 // Create the PDF using wkhtmltopdf
-                                generatePDFWithHtml(outputHtml, outputPdf);
+                                generatePDFWithHtml(outputHtml, outputPdf, wkhtmltopdfPath);
                                 // Delete the temporary HTML file
                                 File htmlFile = new File(outputHtml);
                                 if (htmlFile.exists() && !htmlFile.delete()) {
@@ -150,10 +157,7 @@ public class PdfCreatorMulti {
         }
     }
 
-    public static void generatePDFWithHtml(String htmlFile, String outputPdf) throws Exception {
-        // Path to wkhtmltopdf executable
-        String wkhtmltopdfPath = "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe";
-
+    public static void generatePDFWithHtml(String htmlFile, String outputPdf, String wkhtmltopdfPath) throws Exception {
         // Build the process
         ProcessBuilder processBuilder = new ProcessBuilder(
                 wkhtmltopdfPath,
