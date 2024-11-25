@@ -5,7 +5,6 @@ target/
 
 ### Config ###
 config.properties
-PdfCreator.java
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
